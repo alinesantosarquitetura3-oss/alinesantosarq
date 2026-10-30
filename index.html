@@ -1,0 +1,396 @@
+<title>Aline Santos Arquitetos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Escritório de arquitetura e interiores em Goiânia. Projetos residenciais, comerciais e de interiores que começam na decisão, não na estética. Arquitetura com alma.">
+
+<style>
+  /* Layout: dark full-bleed editorial — slim sticky nav, big imagery, terracotta accents (brand guide) as the only accent color; project gallery opens full-screen detail views */
+  :root{
+    --bg:#0A0A0A; --bg-2:#141210; --fg:#F3F0EA; --muted:#A79E92;
+    --green:#D96A3A; --green-deep:#2A1710; --orange:#D96A3A;
+    --line:rgba(243,240,234,.14); --line-green:rgba(217,106,58,.38);
+    color-scheme:dark;
+    --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+    --sans:"Jost","Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-weight:300;line-height:1.65;-webkit-font-smoothing:antialiased;letter-spacing:.01em}
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3{font-family:var(--serif);font-weight:500;text-wrap:balance;line-height:1.08;margin:0}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--bg)}
+  .wrap{width:100%;max-width:1200px;margin-inline:auto;padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px))}
+  .eyebrow{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--green);font-weight:400;margin:0;display:inline-flex;align-items:center;gap:.7em}
+  .eyebrow::before{content:"";width:16px;height:2px;background:var(--orange);display:inline-block;flex:none}
+
+  header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:41;background:rgba(10,10,10,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:16px}
+  .brand{display:flex;align-items:center;gap:.7rem}
+  .brand .logo{height:26px;width:auto;display:block}
+  .brand small{font-family:var(--sans);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:400;border-left:1px solid var(--line);padding-left:.7rem}
+  @media(max-width:460px){.brand small{display:none}}
+  nav.links{display:flex;gap:1.9rem;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase}
+  nav.links a{color:var(--muted);transition:color .25s}
+  nav.links a:hover,nav.links a:focus-visible{color:var(--fg)}
+  nav.links a:focus-visible{outline:1px solid var(--green);outline-offset:4px}
+  @media(max-width:760px){nav.links{display:none}}
+
+  .hero{position:relative;min-height:clamp(540px,86vh,860px);display:flex;align-items:flex-end;overflow:hidden}
+  .hero-img{position:absolute;inset:0}
+  .hero-img img{width:100%;height:100%;object-fit:cover;animation:drift 26s ease-in-out infinite alternate}
+  @keyframes drift{from{transform:scale(1.04)}to{transform:scale(1.14)}}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,10,10,.88) 0%,rgba(10,10,10,.55) 38%,rgba(10,10,10,.12) 72%),linear-gradient(180deg,rgba(10,10,10,.42) 0%,rgba(10,10,10,0) 32%,rgba(10,10,10,.9) 100%)}
+  .hero .wrap{position:relative;z-index:2;padding-block:clamp(40px,8vh,90px)}
+  .hero h1{font-size:clamp(3rem,9vw,6.5rem);margin:.5rem 0 1.1rem;text-shadow:0 2px 34px rgba(0,0,0,.6)}
+  .hero h1 em{font-style:italic;color:var(--green);text-shadow:0 2px 24px rgba(0,0,0,.92),0 1px 3px rgba(0,0,0,.55)}
+  .hero p.lead{font-family:var(--serif);font-weight:500;max-width:30ch;font-size:clamp(1.35rem,3.4vw,2.05rem);line-height:1.3;color:#F4F1EB;margin:0 0 2rem;text-shadow:0 1px 20px rgba(0,0,0,.8)}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:.9rem}
+
+  .btn{display:inline-flex;align-items:center;gap:.6em;font-size:.82rem;letter-spacing:.16em;text-transform:uppercase;padding:.95em 1.7em;border:1px solid var(--green);color:var(--fg);background:transparent;cursor:pointer;transition:background .3s,color .3s;font-family:var(--sans)}
+  .btn:hover,.btn:focus-visible{background:var(--green);color:#0A0A0A}
+  .btn.solid{background:var(--green);color:#0A0A0A}
+  .btn.solid:hover,.btn.solid:focus-visible{background:transparent;color:var(--fg)}
+  .btn:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+
+  section{padding-block:clamp(72px,11vh,130px)}
+  .sec-head{display:flex;flex-direction:column;gap:1rem;max-width:62ch;margin-bottom:3.2rem}
+  .sec-head h2{font-size:clamp(2rem,5vw,3.3rem)}
+
+  #sobre{background:var(--bg-2)}
+  .about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(2rem,5vw,5rem);align-items:center}
+  .about-copy p{margin:0 0 1.2rem;color:#D8D5CD;max-width:56ch}
+  .about-copy p:first-of-type{font-family:var(--serif);font-size:1.5rem;line-height:1.4;color:var(--fg)}
+  .about-portrait{position:relative}
+  .about-portrait img{width:100%;aspect-ratio:3/4;object-fit:cover;filter:grayscale(.1) contrast(1.02)}
+  .about-portrait::after{content:"";position:absolute;left:-14px;bottom:-14px;width:46%;height:46%;border-left:1px solid var(--line-green);border-bottom:1px solid var(--line-green)}
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;margin-top:3.4rem}
+  .pillar{border-top:1px solid var(--line-green);padding-top:1rem}
+  .pillar h3{font-size:1.3rem;margin-bottom:.35rem}
+  .pillar p{font-size:.92rem;color:var(--muted);margin:0}
+  @media(max-width:820px){.about-grid{grid-template-columns:1fr}.about-portrait{order:-1;max-width:420px}.pillars{grid-template-columns:1fr}}
+
+  .quote{background:var(--bg);text-align:center}
+  .quote blockquote{margin:0 auto;max-width:20ch;font-family:var(--serif);font-weight:500;font-size:clamp(2.2rem,6vw,4rem);line-height:1.12}
+  .quote blockquote em{font-style:italic;color:var(--green)}
+  .quote .src{margin-top:1.6rem;font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+
+  #projetos{background:var(--bg-2)}
+  .filters{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2.4rem}
+  .filters button{font-family:var(--sans);font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;background:transparent;color:var(--muted);border:1px solid var(--line);padding:.6em 1.2em;cursor:pointer;transition:all .25s}
+  .filters button[aria-pressed="true"]{color:#0A0A0A;background:var(--green);border-color:var(--green)}
+  .filters button:hover{color:var(--fg)}
+  .filters button[aria-pressed="true"]:hover{color:#0A0A0A}
+  .filters button:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+  @media(max-width:900px){.gallery{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.gallery{grid-template-columns:1fr}}
+  .tile{position:relative;aspect-ratio:4/5;overflow:hidden;background:#0d0f0d;border:1px solid var(--line);cursor:pointer;padding:0;width:100%;text-align:left;font-family:var(--sans);color:var(--fg)}
+  .tile img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1);filter:brightness(.9)}
+  .tile:hover img,.tile:focus-visible img{transform:scale(1.06);filter:brightness(1)}
+  .tile:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+  .tile figcaption,.tile .cap{position:absolute;inset:auto 0 0 0;padding:0 0 .9rem 0;z-index:2;background:linear-gradient(0deg,rgba(10,10,10,.5),transparent 72%)}
+  .tile .cap-name{display:inline;white-space:nowrap;font-family:var(--serif);font-size:1.08rem;line-height:1.95;color:var(--fg);background:rgba(10,9,8,.58);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);border-radius:0 .5em .5em 0;padding:.22em .75em .22em .95rem;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+  .tile .cap-local{font-size:.76rem;color:var(--muted);margin-top:.2rem}
+  .tile.soon{cursor:default;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#0d0f0d 0 12px,#0f110e 12px 24px)}
+  .tile.soon .ph{text-align:center;padding:1.5rem}
+  .tile.soon .ph .c{font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;color:var(--green);display:block;margin-bottom:.6rem}
+  .tile.soon .ph .n{font-family:var(--serif);font-size:1.2rem;color:var(--fg)}
+  .tile.soon .ph .s{font-size:.72rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-top:.6rem;display:block}
+
+  /* PROJECT DETAIL OVERLAY */
+  #detalhe{position:fixed;inset:0;z-index:60;background:var(--bg);overflow-y:auto;overscroll-behavior:contain}
+  #detalhe .d-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:16px max(22px,env(safe-area-inset-left,0px));padding-top:calc(16px + env(safe-area-inset-top,0px));background:rgba(10,10,10,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .d-back{display:inline-flex;align-items:center;gap:.5em;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fg);background:none;border:0;cursor:pointer;font-family:var(--sans)}
+  .d-back:hover{color:var(--green)}
+  .d-top .logo{height:20px;width:auto;display:block}
+  .d-hero{position:relative;height:clamp(360px,64vh,680px);overflow:hidden}
+  .d-hero img{width:100%;height:100%;object-fit:cover}
+  .d-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.2),rgba(10,10,10,.85))}
+  .d-hero .d-htext{position:absolute;inset:auto 0 0 0;z-index:2;padding-block:clamp(24px,5vh,50px)}
+  .d-hero h2{font-size:clamp(1.5rem,4.4vw,3.1rem);line-height:1.6}
+  .d-hero h2 .tarja{white-space:nowrap;background:rgba(10,9,8,.55);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);border-radius:0 .4em .4em 0;padding:.14em .62em .14em .25em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+  .d-hero h2 em{font-style:italic;color:var(--green)}
+  .d-local{color:var(--muted);margin-top:.5rem;font-size:.95rem}
+  .d-body{padding-block:clamp(40px,7vh,80px)}
+  .d-intro{margin-bottom:clamp(2.5rem,6vh,4.5rem);max-width:68ch}
+  .d-intro .desc{font-family:var(--serif);font-size:clamp(1.3rem,2.6vw,1.75rem);line-height:1.45;color:var(--fg)}
+  .d-mat-min{margin:1.6rem 0 0;font-size:.82rem;letter-spacing:.03em;color:var(--muted);line-height:1.6}
+  .d-mat-min .l{color:var(--orange);text-transform:uppercase;letter-spacing:.18em;font-size:.64rem;margin-right:.7em}
+  .d-imgs{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem}
+  .d-imgs img{width:100%;aspect-ratio:4/3;object-fit:cover;border:1px solid var(--line)}
+  .d-imgs .full{grid-column:1 / -1;aspect-ratio:16/9}
+  @media(max-width:620px){.d-imgs{grid-template-columns:1fr}}
+  .d-cta{margin-top:clamp(2.5rem,6vh,4rem);border-top:1px solid var(--line);padding-top:2.4rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between}
+  .d-cta p{font-family:var(--serif);font-size:1.5rem;margin:0}
+
+  #contato{background:var(--bg)}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);align-items:start}
+  .contact-grid h2{font-size:clamp(2rem,5vw,3.3rem);margin-bottom:1.2rem}
+  .contact-grid p.intro{color:#D8D5CD;max-width:46ch;margin:0 0 2rem}
+  .channels{display:flex;flex-direction:column;gap:1.1rem}
+  .channel{display:flex;flex-direction:column;gap:.2rem;border-top:1px solid var(--line);padding-top:1.1rem}
+  .channel .lab{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--green)}
+  .channel .val{font-family:var(--serif);font-size:1.45rem}
+  .channel a.val{transition:color .25s}
+  .channel a.val:hover{color:var(--green)}
+  .cta-card{border:1px solid var(--line-green);padding:clamp(1.8rem,4vw,2.6rem);background:radial-gradient(130% 130% at 50% 0%,#3A2114 0%,#130E0A 72%)}
+  .cta-card h3{font-size:1.9rem;margin-bottom:.8rem}
+  .cta-card p{color:#CFE0D4;margin:0 0 1.6rem;font-size:.95rem}
+  @media(max-width:760px){.contact-grid{grid-template-columns:1fr}}
+
+  footer{border-top:1px solid var(--line);padding-block:2.4rem}
+  .foot-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;align-items:center;font-size:.78rem;color:var(--muted);letter-spacing:.06em}
+  .foot-inner a:hover{color:var(--fg)}
+
+  @media(prefers-reduced-motion:reduce){.hero-img img{animation:none;transform:scale(1.06)}*{transition:none!important}}
+</style>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#inicio" aria-label="Aline Santos Arquitetos — início">
+      <img class="logo" src="assets/logo.png" alt="Aline Santos Arquitetos">
+      <small>Arquitetura&nbsp;e&nbsp;Interiores</small>
+    </a>
+    <nav class="links" aria-label="Navegação principal">
+      <a href="#projetos">Projetos</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#contato">Contato</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero" aria-label="Apresentação">
+    <div class="hero-img"><img src="assets/hero-casa.jpg" alt="Residência contemporânea em concreto implantada no topo de uma serra, cercada por mata nativa"></div>
+    <div class="wrap">
+      <p class="eyebrow" style="text-shadow:0 1px 14px rgba(0,0,0,.7)">Aline Santos Arquitetos Associados · Goiânia</p>
+      <h1>Arquitetura <em>com alma.</em></h1>
+      <p class="lead">Todo bom projeto começa por uma boa conversa. Conte o seu sonho — e vamos descobrir, juntos, como transformá-lo em um espaço que funciona e faz bem a quem o usa.</p>
+      <div class="hero-actions">
+        <a class="btn solid" href="#contato">Vamos nos conhecer</a>
+        <a class="btn" href="#projetos">Ver projetos</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="sobre" aria-labelledby="sobre-h">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-copy">
+          <p class="eyebrow">Sobre</p>
+          <h2 id="sobre-h" style="font-size:clamp(2rem,5vw,3.1rem);margin:.6rem 0 1.6rem">Há mais de 25&nbsp;anos transformando decisões em espaços que funcionam.</h2>
+          <p>Fundado pela arquiteta Aline Santos, o escritório atua no mercado goiano com projetos residenciais, comerciais e de interiores — partindo de uma ideia simples: um projeto só é bonito de verdade quando funciona, e quando faz bem a quem vive o espaço.</p>
+          <p>Por isso o ponto de partida nunca é a estética. É você. Antes de qualquer traço, buscamos compreender a rotina, os hábitos, as prioridades e a visão de futuro de cada cliente. É desse entendimento que nascem as decisões mais seguras sobre layout, materiais, iluminação e uso real de cada ambiente.</p>
+          <p>Há também um cuidado holístico com cada projeto: luz, ventilação, fluidez e a relação entre os ambientes trabalhando a favor da saúde física, mental e emocional de quem vive neles. O resultado é uma arquitetura contemporânea e atemporal, que acompanha as fases da vida e protege o investimento de quem decidiu construir com critério.</p>
+        </div>
+        <div class="about-portrait"><img src="assets/aline-retrato.jpg" alt="Aline Santos, arquiteta fundadora do escritório"></div>
+      </div>
+      <div class="pillars">
+        <div class="pillar"><h3>Decisão antes da estética</h3><p>Condução técnica que organiza prioridades e reduz erros, retrabalho e desperdício antes da obra começar.</p></div>
+        <div class="pillar"><h3>Ambientes que funcionam</h3><p>Layout, circulação e uso real pensados a partir da rotina — espaços que acompanham a vida de quem os habita.</p></div>
+        <div class="pillar"><h3>Bem-estar integrado</h3><p>Luz, ventilação e fluidez em equilíbrio, para ambientes saudáveis que fazem bem no dia a dia.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote" aria-hidden="true">
+    <div class="wrap">
+      <blockquote>Antes da estética, vem a <em>decisão.</em></blockquote>
+      <p class="src">Arquitetura com alma</p>
+    </div>
+  </section>
+
+  <section id="projetos" aria-labelledby="proj-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Projetos</p>
+        <h2 id="proj-h">Projetos residenciais, de interiores e comerciais — cada um a partir de uma decisão.</h2>
+      </div>
+      <div class="filters" role="group" aria-label="Filtrar projetos por categoria">
+        <button data-filter="todos" aria-pressed="true">Todos</button>
+        <button data-filter="residenciais" aria-pressed="false">Residenciais</button>
+        <button data-filter="interiores" aria-pressed="false">Interiores</button>
+        <button data-filter="comerciais" aria-pressed="false">Comerciais</button>
+      </div>
+      <div class="gallery" id="gallery"></div>
+    </div>
+  </section>
+
+  <section id="contato" aria-labelledby="contato-h">
+    <div class="wrap">
+      <div class="contact-grid">
+        <div>
+          <p class="eyebrow">Contato</p>
+          <h2 id="contato-h">Vamos decidir bem, juntos.</h2>
+          <p class="intro">Conte onde você está no seu projeto — terreno, reforma ou só a ideia. A primeira conversa já começa a organizar as decisões.</p>
+          <div class="channels">
+            <div class="channel"><span class="lab">WhatsApp</span><a class="val" href="https://wa.me/5562984089202" target="_blank" rel="noopener">+55 62 98408-9202</a></div>
+            <div class="channel"><span class="lab">Instagram</span><a class="val" href="https://instagram.com/alinesantosarq" target="_blank" rel="noopener">@alinesantosarq</a></div>
+            <div class="channel"><span class="lab">E-mail</span><span class="val" style="font-size:1.15rem;user-select:all">aline@alinesantosarquitetura.com.br</span></div>
+            <div class="channel"><span class="lab">Atendimento</span><span class="val" style="font-size:1.15rem">Goiânia · GO</span></div>
+          </div>
+        </div>
+        <aside class="cta-card">
+          <h3>Comece pela decisão.</h3>
+          <p>Uma casa boa começa antes da obra. Fale com o escritório e transforme desejo, orçamento e rotina em decisões claras.</p>
+          <a class="btn solid" href="https://wa.me/5562984089202" target="_blank" rel="noopener">Falar no WhatsApp</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>© 2026 Aline Santos Arquitetos Associados · Goiânia/GO</span>
+    <span><a href="https://instagram.com/alinesantosarq" target="_blank" rel="noopener">@alinesantosarq</a> · Arquitetura com alma</span>
+  </div>
+</footer>
+
+<div id="detalhe" hidden aria-modal="true" role="dialog"></div>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"LocalBusiness","name":"Aline Santos Arquitetos Associados","description":"Escritório de arquitetura e interiores em Goiânia. Projetos residenciais, comerciais e de interiores.","areaServed":{"@type":"City","name":"Goiânia"},"address":{"@type":"PostalAddress","addressLocality":"Goiânia","addressRegion":"GO","addressCountry":"BR"},"telephone":"+55 62 98408-9202","email":"alinesantosarquitetura3@gmail.com","slogan":"Arquitetura com alma","sameAs":["https://instagram.com/alinesantosarq"]}
+</script>
+
+<script>
+const PROJETOS=[
+ {slug:"fernando",nome:"Residência Jardins França",cat:"residenciais",catLabel:"Residencial",local:"Jardins França · Goiânia",
+  desc:"Residência contemporânea de volumes horizontais, em que a pedra e a madeira se encontram com grandes panos de vidro. A piscina se estende para o jardim, integrando interior e paisagem.",
+  mat:["Concreto","Pedra natural","Madeira","Amplas esquadrias de vidro","Piscina com deck","Paisagismo"],
+  imgs:["fernando-1.jpg","fernando-2.jpg","fernando-3.jpg","fernando-4.jpg","fernando-5.jpg","fernando-6.jpg","fernando-7.jpg"]},
+ {slug:"rui",nome:"Residência em Brasília",cat:"residenciais",catLabel:"Residencial",local:"Brasília · DF",
+  desc:"Casa térrea marcada por um pórtico de ripas verticais que se acende à noite. Amplas aberturas conectam os ambientes ao pátio e à piscina.",
+  mat:["Ripado vertical","Pedra","Concreto","Grandes panos de vidro","Piscina"],
+  imgs:["rui-1.jpg","rui-2.jpg","rui-3.jpg","rui-4.jpg","rui-5.jpg","rui-6.jpg"]},
+ {slug:"vilma",nome:"Residência Môssâmedes",cat:"residenciais",catLabel:"Residencial",local:"Môssâmedes · GO",
+  desc:"Arquitetura de materialidade quente — tijolo, pedra e madeira sob telha cerâmica. Ao fim da tarde, a iluminação revela o pátio e a piscina abraçados pela vegetação.",
+  mat:["Tijolo aparente","Pedra","Madeira","Telha cerâmica","Piscina","Paisagismo"],
+  imgs:["vilma-1.jpg","vilma-2.jpg","vilma-3.jpg","vilma-4.jpg"]},
+ {slug:"heber",nome:"Residência Contemporânea",cat:"residenciais",catLabel:"Residencial",local:"Goiânia · GO",
+  desc:"Sobrado contemporâneo cuja fachada combina cobogó e pedra, filtrando a luz e criando privacidade sem fechar os ambientes.",
+  mat:["Cobogó","Pedra","Concreto","Madeira","Vidro"],
+  imgs:["heber-1.jpg","heber-2.jpg"]},
+ {slug:"roberta",nome:"Residência Aldeia do Vale",cat:"residenciais",catLabel:"Residencial",local:"Aldeia do Vale · Goiânia",
+  desc:"Volume horizontal baixo, assentado sobre o cerrado. Planos em madeira, pedra e concreto compõem uma fachada serena, de linhas longas.",
+  mat:["Madeira","Pedra","Concreto","Vidro","Volumes em branco e grafite"],
+  imgs:["roberta-1.jpg","roberta-2.jpg","roberta-3.jpg","roberta-4.jpg","roberta-5.jpg","roberta-6.jpg"]},
+ {slug:"jardins-paris",nome:"Residência Jardins Paris",cat:"residenciais",catLabel:"Residencial",local:"Jardins Paris · Goiânia",
+  desc:"Sobrado de linhas retas e volumes brancos, com um plano de pedra natural que ancora a fachada. Ao anoitecer, a iluminação embutida desenha a casa, o carport e o jardim.",
+  mat:["Concreto","Pedra natural","Madeira","Grandes panos de vidro","Paisagismo","Iluminação de fachada"],
+  imgs:["jardins-paris-1.jpg","jardins-paris-2.jpg","jardins-paris-3.jpg","jardins-paris-4.jpg","jardins-paris-5.jpg","jardins-paris-6.jpg"]},
+ {slug:"alphaville",nome:"Residência Alphaville",cat:"residenciais",catLabel:"Residencial",local:"Alphaville · Goiânia",
+  desc:"Casa de volumes brancos e brises de madeira que giram para abrir ou filtrar a luz. A pedra natural reveste trechos da fachada e, dentro, uma escada curva se enrola em torno de um jardim.",
+  mat:["Concreto","Brise de madeira","Pedra natural","Vidro","Escada curva","Paisagismo"],
+  imgs:["alphaville-1.jpg","alphaville-2.jpg","alphaville-3.jpg","alphaville-4.jpg","alphaville-5.jpg","alphaville-6.jpg","alphaville-7.jpg"]},
+ {slug:"mauro",nome:"Apartamento Setor Oeste",cat:"interiores",catLabel:"Interiores",local:"Setor Oeste · Goiânia",
+  desc:"Interiores de apartamento em tons quentes — madeira, mármore e marcenaria sob medida compõem ambientes integrados, com plantas trazendo o verde para dentro.",
+  mat:["Madeira","Mármore","Marcenaria sob medida","Vidro","Plantas"],
+  imgs:["mauro-1.jpg","mauro-2.jpg","mauro-3.jpg","mauro-4.jpg","mauro-5.jpg","mauro-6.jpg","mauro-7.jpg"]},
+ {slug:"anapaula",nome:"Apartamento em São Paulo",cat:"interiores",catLabel:"Interiores",local:"São Paulo · SP",
+  desc:"Apartamento onde o verde entra como jardim vertical e painéis ripados em madeira criam calor. Mármore, espelhos e marcenaria desenham ambientes sofisticados e acolhedores.",
+  mat:["Jardim vertical","Madeira ripada","Mármore","Espelhos","Marcenaria sob medida"],
+  imgs:["anapaula-1.jpg","anapaula-2.jpg","anapaula-3.jpg","anapaula-4.jpg"]},
+ {slug:"claudio",nome:"Residência Cláudio e Daniela",cat:"interiores",catLabel:"Interiores",local:"Goiânia · GO",
+  desc:"Interiores integrados de uma casa — living, sala de jantar e espaço gourmet com churrasqueira que se abrem para a varanda e a piscina. Mármore, madeira ripada e marcenaria sob medida dão o tom.",
+  mat:["Mármore","Madeira ripada","Marcenaria sob medida","Churrasqueira","Grandes panos de vidro","Piscina","Iluminação embutida"],
+  imgs:["claudio-1.jpg","claudio-2.jpg","claudio-3.jpg","claudio-4.jpg","claudio-5.jpg","claudio-6.jpg","claudio-7.jpg"]},
+ {slug:"jose",nome:"Apartamento Gran Swiss",cat:"interiores",catLabel:"Interiores",local:"Goiânia · GO",
+  desc:"Apartamento de ambientes integrados onde a madeira ripada aquece as paredes e um painel de pedra natural emoldura o living. Mármore, marcenaria sob medida e um bar desenham social e jantar com vista para a cidade.",
+  mat:["Madeira ripada","Pedra natural","Mármore","Marcenaria sob medida","Bar / adega","Palha natural","Iluminação pendente","Vidro"],
+  imgs:["jose-1.jpg","jose-2.jpg","jose-3.jpg","jose-4.jpg","jose-5.jpg","jose-6.jpg","jose-7.jpg"]},
+ {slug:"alexandre",nome:"Escritório Flamboyant",cat:"comerciais",catLabel:"Comercial",local:"Flamboyant Park · Goiânia",
+  desc:"Escritório corporativo com estações de trabalho integradas, sala de reunião e painéis verdes que marcam a identidade. Iluminação linear e marcenaria em madeira trazem conforto ao ambiente de trabalho.",
+  mat:["Marcenaria em madeira","Painéis verdes","Iluminação linear","Vidro","Estações de trabalho"],
+  imgs:["alexandre-1.jpg","alexandre-2.jpg","alexandre-3.jpg","alexandre-4.jpg","alexandre-5.jpg","alexandre-6.jpg"]},
+ {slug:"mac",nome:"Loja MAC Marista",cat:"comerciais",catLabel:"Comercial",local:"Setor Marista · Goiânia",
+  desc:"Projeto comercial com fachada iluminada que destaca a marca e interiores de recepção acolhedores — madeira, painéis verdes e áreas de espera que combinam conforto e identidade visual.",
+  mat:["Fachada iluminada","Madeira","Painéis verdes","Marcenaria","Iluminação"],
+  imgs:["mac-1.jpg","mac-2.jpg","mac-3.jpg","mac-4.jpg","mac-5.jpg","mac-6.jpg"]},
+ {slug:"sicoob",nome:"Agência Sicoob Nova Central",cat:"comerciais",catLabel:"Comercial",local:"Goiânia · GO",
+  desc:"Edifício comercial de dois pavimentos com fachada em cobogó e um jardim vertical que emoldura a marca. Pedra, concreto e vidro compõem um volume sólido, de acesso generoso por rampa.",
+  mat:["Cobogó","Concreto aparente","Pedra","Jardim vertical","Vidro","Estrutura metálica","Rampa de acesso"],
+  imgs:["sicoob-1.jpg","sicoob-2.jpg","sicoob-3.jpg","sicoob-4.jpg","sicoob-5.jpg","sicoob-6.jpg","sicoob-7.jpg"]},
+ {slug:"loja",nome:"Loja Baru · Design Brasileiro",cat:"comerciais",catLabel:"Comercial",local:"Goiânia · GO",
+  desc:"Loja de design e mobiliário com fachada de esquina em madeira e iluminação quente que valoriza a marca. Dentro, pé-direito alto e piso claro conduzem o olhar pelos ambientes expositivos.",
+  mat:["Madeira","Vidro","Iluminação de fachada","Pé-direito alto","Piso porcelanato","Paisagismo"],
+  imgs:["loja-1.jpg","loja-2.jpg","loja-3.jpg"]},
+];
+const SOON=[];
+const BASE="assets/projetos/";
+
+function tileHTML(p){
+  return `<button class="tile" data-cat="${p.cat}" data-slug="${p.slug}" aria-label="Abrir projeto ${p.nome}">
+    <img src="${BASE+p.imgs[0]}" alt="${p.nome} — ${p.catLabel.toLowerCase()}">
+    <span class="cap"><span class="cap-name">${p.nome}</span></span>
+  </button>`;
+}
+function soonHTML(s){
+  return `<div class="tile soon" data-cat="${s.cat}"><div class="ph"><span class="c">${s.label}</span><span class="n">Em breve</span><span class="s">Novos projetos a publicar</span></div></div>`;
+}
+const gallery=document.getElementById("gallery");
+gallery.innerHTML=PROJETOS.map(tileHTML).join("")+SOON.map(soonHTML).join("");
+
+// filters
+const fbtns=[].slice.call(document.querySelectorAll(".filters button"));
+fbtns.forEach(b=>b.addEventListener("click",()=>{
+  const f=b.getAttribute("data-filter");
+  fbtns.forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));
+  [].slice.call(gallery.children).forEach(t=>{
+    t.hidden=!(f==="todos"||t.getAttribute("data-cat")===f);
+  });
+}));
+
+// project detail
+const detalhe=document.getElementById("detalhe");
+function openProject(slug,push){
+  const p=PROJETOS.find(x=>x.slug===slug); if(!p) return;
+  const imgs=p.imgs.map((f,i)=>{
+    const cls=(i===0||(p.imgs.length%2===0&&i===p.imgs.length-1))?' class="full"':'';
+    return `<img${cls} src="${BASE+f}" alt="${p.nome} — imagem ${i+1}" loading="lazy">`;
+  }).join("");
+  detalhe.innerHTML=`
+    <div class="d-top">
+      <button class="d-back" id="dback">← Voltar aos projetos</button>
+      <img class="logo" src="assets/logo.png" alt="Aline Santos Arquitetos">
+    </div>
+    <div class="d-hero">
+      <img src="${BASE+p.imgs[0]}" alt="${p.nome}">
+      <div class="d-htext"><div class="wrap"><h2><span class="tarja">${p.nome}</span></h2></div></div>
+    </div>
+    <div class="d-body"><div class="wrap">
+      <div class="d-intro">
+        <p class="desc">${p.desc}</p>
+        <p class="d-mat-min"><span class="l">Materiais</span>${p.mat.join(" · ")}</p>
+      </div>
+      <div class="d-imgs">${imgs}</div>
+      <div class="d-cta"><p>Quer um projeto assim, pensado para a sua rotina?</p><a class="btn solid" href="https://wa.me/5562984089202" target="_blank" rel="noopener">Vamos conversar</a></div>
+    </div></div>`;
+  detalhe.hidden=false;
+  document.body.style.overflow="hidden";
+  detalhe.scrollTop=0;
+  document.getElementById("dback").addEventListener("click",closeProject);
+  if(push!==false){try{history.pushState({slug},"","#"+slug);}catch(e){}}
+}
+function closeProject(){
+  detalhe.hidden=true; detalhe.innerHTML=""; document.body.style.overflow="";
+  if(location.hash){try{history.pushState({},"","#projetos");}catch(e){}}
+}
+gallery.addEventListener("click",e=>{
+  const t=e.target.closest(".tile[data-slug]"); if(t) openProject(t.getAttribute("data-slug"));
+});
+window.addEventListener("popstate",e=>{
+  const slug=(location.hash||"").replace("#","");
+  if(PROJETOS.find(x=>x.slug===slug)) openProject(slug,false); else closeProject();
+});
+// open from hash on load
+(function(){const slug=(location.hash||"").replace("#","");if(PROJETOS.find(x=>x.slug===slug))openProject(slug,false);})();
+
+// smooth scroll for nav anchors
+document.querySelectorAll('header a[href^="#"],.hero a[href^="#"]').forEach(a=>{
+  a.addEventListener("click",function(e){
+    const id=a.getAttribute("href");
+    if(id.length>1){const el=document.querySelector(id);if(el){e.preventDefault();el.scrollIntoView({behavior:"smooth",block:"start"});}}
+  });
+});
+</script>
