@@ -201,23 +201,25 @@
   </section>
 
   <style>
-  .olhar{position:relative;overflow:hidden;background:var(--bg);padding:clamp(4rem,10vh,8rem) 0}
-  .olhar .wrap{position:relative;max-width:1200px;margin:0 auto;padding:0 max(22px,env(safe-area-inset-left,0px))}
-  .olhar-grid{display:grid;grid-template-columns:.82fr 1fr;gap:clamp(2rem,5vw,4.5rem);align-items:center}
-  .olhar-photo img{width:100%;height:auto;display:block;filter:grayscale(1) contrast(1.03);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 24%,#000 74%,transparent 100%),linear-gradient(180deg,transparent 0,#000 14%,#000 86%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0,#000 24%,#000 74%,transparent 100%),linear-gradient(180deg,transparent 0,#000 14%,#000 86%,transparent 100%);mask-composite:intersect}
-  .olhar-text h2{font-family:var(--serif);font-size:clamp(2rem,4.4vw,3.2rem);line-height:1.1;margin:.4rem 0 1.6rem}
+  .olhar{position:relative;overflow:hidden;background:var(--bg);isolation:isolate}
+  .olhar-bg{position:absolute;inset:0;z-index:0;background:url(assets/aline-olhar.jpg) right center/cover no-repeat;filter:grayscale(1) contrast(1.05)}
+  .olhar-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(10,9,8,.06) 0%,rgba(10,9,8,.12) 32%,rgba(10,9,8,.68) 56%,rgba(10,9,8,.9) 100%),linear-gradient(180deg,rgba(10,9,8,.5) 0%,rgba(10,9,8,0) 20%,rgba(10,9,8,0) 80%,rgba(10,9,8,.5) 100%)}
+  .olhar .wrap{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:clamp(4.5rem,11vh,8.5rem) max(22px,env(safe-area-inset-left,0px))}
+  .olhar-text{margin-left:auto;max-width:560px}
+  .olhar-text h2{font-family:var(--serif);font-size:clamp(2.1rem,4.6vw,3.5rem);line-height:1.08;margin:.4rem 0 1.7rem}
   .olhar-text h2 em{font-style:italic;color:var(--green)}
-  .olhar-stanza{font-family:var(--serif);font-size:clamp(1.05rem,1.5vw,1.26rem);line-height:1.5;color:var(--muted);margin:0 0 .95rem;max-width:48ch}
+  .olhar-stanza{font-family:var(--serif);font-size:clamp(1.05rem,1.5vw,1.26rem);line-height:1.5;color:var(--muted);margin:0 0 .95rem;text-shadow:0 1px 10px rgba(0,0,0,.5)}
   .olhar-stanza b{font-weight:400;color:var(--fg)}
-  .olhar-close{font-family:var(--serif);font-style:italic;font-size:clamp(1.2rem,2vw,1.55rem);line-height:1.4;color:var(--fg);margin-top:1.8rem;max-width:48ch}
+  .olhar-close{font-family:var(--serif);font-style:italic;font-size:clamp(1.2rem,2vw,1.55rem);line-height:1.4;color:var(--fg);margin-top:1.8rem;text-shadow:0 1px 10px rgba(0,0,0,.5)}
   .olhar-close b{color:var(--green);font-weight:400}
-  @media(max-width:820px){.olhar-grid{grid-template-columns:1fr}.olhar-photo{position:absolute;inset:0;z-index:0;opacity:.2}.olhar-photo img{height:100%;object-fit:cover;-webkit-mask-image:linear-gradient(180deg,transparent,#000 28%,#000 72%,transparent);mask-image:linear-gradient(180deg,transparent,#000 28%,#000 72%,transparent)}.olhar-text{position:relative;z-index:1}.olhar-stanza,.olhar-close{max-width:none}}
+  .olhar .eyebrow{text-shadow:0 1px 10px rgba(0,0,0,.5)}
+  @media(max-width:820px){.olhar-bg{background-position:60% top}.olhar-scrim{background:linear-gradient(180deg,rgba(10,9,8,.42) 0%,rgba(10,9,8,.66) 40%,rgba(10,9,8,.88) 100%)}.olhar-text{margin-left:0;max-width:none}}
   </style>
   <section class="olhar" aria-label="De onde vem o meu olhar">
+    <div class="olhar-bg" role="img" aria-label="Aline Santos, retrato em preto e branco"></div>
+    <div class="olhar-scrim"></div>
     <div class="wrap">
-      <div class="olhar-grid">
-        <div class="olhar-photo"><img src="assets/aline-olhar.jpg" alt="Aline Santos, retrato em preto e branco" loading="lazy"></div>
-        <div class="olhar-text">
+      <div class="olhar-text">
           <p class="eyebrow">Aline Santos</p>
           <h2>De onde vem o meu <em>olhar?</em></h2>
           <p class="olhar-stanza"><b>Do que sinto ao que desenho.</b> Das referências que ganham forma entre traços, cores e texturas.</p>
@@ -229,7 +231,6 @@
           <p class="olhar-stanza"><b>Da vontade eterna que tenho de socializar.</b> De imaginar espaços para receber pessoas, compartilhar momentos e guardar memórias. E de todos os sabores que ainda serão experimentados ali.</p>
           <p class="olhar-stanza"><b>Da percepção da singularidade de cada família</b> que vai habitar aquela casa — seus hábitos, seus afetos, seu jeito de viver.</p>
           <p class="olhar-close">É desse encontro entre o que me inspira e o que faz sentido para você <b>que nasce cada projeto.</b></p>
-        </div>
       </div>
     </div>
   </section>
@@ -289,6 +290,30 @@
 
 <script>
 const PROJETOS=[
+ {slug:"sandro",nome:"Residência Sandro e Vanilza",cat:"residenciais",catLabel:"Residencial",local:"Goiânia · GO",
+  desc:"Residência contemporânea de volumes horizontais, com fachada em pedra e revestimento metálico recortada por grandes panos de vidro. Dentro, a marcenaria sob medida e os nichos iluminados conduzem o olhar por ambientes de luz quente.",
+  mat:["Concreto","Pedra natural","Revestimento metálico","Marcenaria sob medida","Nichos iluminados","Amplas esquadrias de vidro"],
+  imgs:["sandro-1.jpg","sandro-2.jpg","sandro-3.jpg","sandro-4.jpg","sandro-5.jpg","sandro-6.jpg","sandro-7.jpg"]},
+ {slug:"maquete",nome:"Centro de Treinamento",cat:"comerciais",catLabel:"Comercial",local:"Goiás · GO",
+  desc:"Complexo de uso coletivo em pedra rústica, com arcadas e pergolados que abrem para áreas de convívio ao ar livre. A arquitetura dialoga com o terreno e a paisagem, entre a sombra e o sol.",
+  mat:["Pedra rústica","Arcos em alvenaria","Pergolado de madeira","Telha cerâmica","Áreas de convívio","Paisagismo"],
+  imgs:["maquete-1.jpg","maquete-2.jpg","maquete-3.jpg","maquete-4.jpg"]},
+ {slug:"chale",nome:"Chalé Metálico",cat:"residenciais",catLabel:"Residencial",local:"Zona rural · GO",
+  desc:"Chalé compacto de estrutura metálica leve, assentado sobre o relevo. Os panos de vidro emolduram a paisagem e, no interior, a madeira e a pedra criam um refúgio de aconchego.",
+  mat:["Estrutura metálica","Cobertura metálica","Madeira","Pedra","Panos de vidro","Deck externo"],
+  imgs:["chale-1.jpg","chale-2.jpg","chale-3.jpg","chale-4.jpg","chale-5.jpg","chale-6.jpg","chale-7.jpg"]},
+ {slug:"sicoob",nome:"Agência Sicoob Nova Central",cat:"comerciais",catLabel:"Comercial",local:"Goiânia · GO",
+  desc:"Edifício comercial de dois pavimentos com fachada em cobogó e um jardim vertical que emoldura a marca. Pedra, concreto e vidro compõem um volume sólido, de acesso generoso por rampa.",
+  mat:["Cobogó","Concreto aparente","Pedra","Jardim vertical","Vidro","Estrutura metálica","Rampa de acesso"],
+  imgs:["sicoob-1.jpg","sicoob-2.jpg","sicoob-3.jpg","sicoob-4.jpg","sicoob-5.jpg","sicoob-6.jpg","sicoob-7.jpg"]},
+ {slug:"crediadag",nome:"Agência Sicoob Crediadag · Castelo Branco",cat:"comerciais",catLabel:"Comercial",local:"Castelo Branco · GO",
+  desc:"Agência bancária de volume horizontal, com faixas da marca em destaque sobre a fachada. Estacionamento amplo e paisagismo acolhem o cliente desde a chegada, de dia e à noite.",
+  mat:["Estrutura metálica","Revestimento da marca","Cobogó","Vidro","Paisagismo","Estacionamento coberto"],
+  imgs:["crediadag-1.jpg","crediadag-2.jpg","crediadag-3.jpg","crediadag-4.jpg","crediadag-5.jpg"]},
+ {slug:"ricardo",nome:"Residência Ricardo e Beatriz",cat:"residenciais",catLabel:"Residencial",local:"Goiânia · GO",
+  desc:"Residência contemporânea de linhas horizontais, marcada por sancas iluminadas que acendem a casa à noite. A piscina se integra à área de estar e o paisagismo tropical envolve o conjunto.",
+  mat:["Concreto","Iluminação em sanca","Piscina com deck","Madeira","Painéis ripados","Paisagismo tropical","Espelho d'água"],
+  imgs:["ricardo-1.jpg","ricardo-2.jpg","ricardo-3.jpg","ricardo-4.jpg","ricardo-5.jpg","ricardo-6.jpg","ricardo-7.jpg"]},
  {slug:"fernando",nome:"Residência Jardins França",cat:"residenciais",catLabel:"Residencial",local:"Jardins França · Goiânia",
   desc:"Residência contemporânea de volumes horizontais, em que a pedra e a madeira se encontram com grandes panos de vidro. A piscina se estende para o jardim, integrando interior e paisagem.",
   mat:["Concreto","Pedra natural","Madeira","Amplas esquadrias de vidro","Piscina com deck","Paisagismo"],
@@ -341,10 +366,6 @@ const PROJETOS=[
   desc:"Projeto comercial com fachada iluminada que destaca a marca e interiores de recepção acolhedores — madeira, painéis verdes e áreas de espera que combinam conforto e identidade visual.",
   mat:["Fachada iluminada","Madeira","Painéis verdes","Marcenaria","Iluminação"],
   imgs:["mac-1.jpg","mac-2.jpg","mac-3.jpg","mac-4.jpg","mac-5.jpg","mac-6.jpg"]},
- {slug:"sicoob",nome:"Agência Sicoob Nova Central",cat:"comerciais",catLabel:"Comercial",local:"Goiânia · GO",
-  desc:"Edifício comercial de dois pavimentos com fachada em cobogó e um jardim vertical que emoldura a marca. Pedra, concreto e vidro compõem um volume sólido, de acesso generoso por rampa.",
-  mat:["Cobogó","Concreto aparente","Pedra","Jardim vertical","Vidro","Estrutura metálica","Rampa de acesso"],
-  imgs:["sicoob-1.jpg","sicoob-2.jpg","sicoob-3.jpg","sicoob-4.jpg","sicoob-5.jpg","sicoob-6.jpg","sicoob-7.jpg"]},
  {slug:"loja",nome:"Loja Baru · Design Brasileiro",cat:"comerciais",catLabel:"Comercial",local:"Goiânia · GO",
   desc:"Loja de design e mobiliário com fachada de esquina em madeira e iluminação quente que valoriza a marca. Dentro, pé-direito alto e piso claro conduzem o olhar pelos ambientes expositivos.",
   mat:["Madeira","Vidro","Iluminação de fachada","Pé-direito alto","Piso porcelanato","Paisagismo"],
