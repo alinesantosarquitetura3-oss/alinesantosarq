@@ -89,6 +89,7 @@
   .tile:hover img,.tile:focus-visible img{transform:scale(1.06);filter:brightness(1)}
   .tile:focus-visible{outline:2px solid var(--green);outline-offset:3px}
   .tile figcaption,.tile .cap{position:absolute;inset:auto 0 0 0;padding:0 0 .9rem 0;z-index:2;background:linear-gradient(0deg,rgba(10,10,10,.5),transparent 72%)}
+  .tile .cap-local{display:block;width:-moz-fit-content;width:fit-content;white-space:nowrap;font-family:var(--serif);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--fg);background:rgba(10,9,8,.5);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);border-radius:0 .4em .4em 0;padding:.2em .7em .2em .95rem;margin-bottom:.22rem}
   .tile .cap-name{display:inline;white-space:nowrap;font-family:var(--serif);font-size:1.08rem;line-height:1.95;color:var(--fg);background:rgba(10,9,8,.58);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);border-radius:0 .5em .5em 0;padding:.22em .75em .22em .95rem;-webkit-box-decoration-break:clone;box-decoration-break:clone}
   .tile .cap-local{font-size:.76rem;color:var(--muted);margin-top:.2rem}
   .tile.soon{cursor:default;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#0d0f0d 0 12px,#0f110e 12px 24px)}
@@ -110,6 +111,7 @@
   .d-hero h2{font-size:clamp(1.5rem,4.4vw,3.1rem);line-height:1.6}
   .d-hero h2 .tarja{white-space:nowrap;background:rgba(10,9,8,.55);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);border-radius:0 .4em .4em 0;padding:.14em .62em .14em .25em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
   .d-hero h2 em{font-style:italic;color:var(--green)}
+  .d-hero h2 .d-local{display:block;width:-moz-fit-content;width:fit-content;white-space:nowrap;font-family:var(--serif);font-size:clamp(.78rem,1.5vw,1.02rem);letter-spacing:.09em;text-transform:uppercase;color:var(--fg);background:rgba(10,9,8,.5);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);border-radius:0 .4em .4em 0;padding:.16em .62em;margin-bottom:.55rem}
   .d-local{color:var(--muted);margin-top:.5rem;font-size:.95rem}
   .d-body{padding-block:clamp(40px,7vh,80px)}
   .d-intro{margin-bottom:clamp(2.5rem,6vh,4.5rem);max-width:68ch}
@@ -290,19 +292,19 @@
 
 <script>
 const PROJETOS=[
- {slug:"sandro",nome:"Residência Sandro e Vanilza",cat:"residenciais",catLabel:"Residencial",local:"Goiânia · GO",
+ {slug:"sandro",nome:"Sandro e Vanilza",pad:1,cat:"residenciais",catLabel:"Residencial",local:"Granville",
   desc:"Residência contemporânea de volumes horizontais, com fachada em pedra e revestimento metálico recortada por grandes panos de vidro. Dentro, a marcenaria sob medida e os nichos iluminados conduzem o olhar por ambientes de luz quente.",
   mat:["Concreto","Pedra natural","Revestimento metálico","Marcenaria sob medida","Nichos iluminados","Amplas esquadrias de vidro"],
   imgs:["sandro-1.jpg","sandro-2.jpg","sandro-3.jpg","sandro-4.jpg","sandro-5.jpg","sandro-6.jpg","sandro-7.jpg"]},
- {slug:"maquete",nome:"Centro de Treinamento",cat:"comerciais",catLabel:"Comercial",local:"Goiás · GO",
+ {slug:"maquete",nome:"Centro de Treinamento",pad:1,cat:"comerciais",catLabel:"Comercial",local:"Villa Assisi, Pirenópolis",
   desc:"Complexo de uso coletivo em pedra rústica, com arcadas e pergolados que abrem para áreas de convívio ao ar livre. A arquitetura dialoga com o terreno e a paisagem, entre a sombra e o sol.",
   mat:["Pedra rústica","Arcos em alvenaria","Pergolado de madeira","Telha cerâmica","Áreas de convívio","Paisagismo"],
   imgs:["maquete-1.jpg","maquete-2.jpg","maquete-3.jpg","maquete-4.jpg"]},
- {slug:"villa",nome:"Chalés Villa Assisi",cat:"comerciais",catLabel:"Comercial",local:"Serra · GO",
+ {slug:"villa",nome:"Villeta Maggiore e Villeta La Rocca",pad:1,cat:"comerciais",catLabel:"Comercial",local:"Villa Assisi, Pirenópolis",
   desc:"Chalés de hospedagem em pedra e madeira, abertos para a serra. Ofurôs em deck privativo, suítes com vista panorâmica e cozinhas de acabamento rústico criam um refúgio que integra conforto e paisagem.",
   mat:["Pedra","Madeira","Ofurô em deck","Panos de vidro","Cobertura metálica","Vista panorâmica","Paisagismo nativo"],
   imgs:["villa-1.jpg","villa-2.jpg","villa-3.jpg","villa-4.jpg","villa-5.jpg","villa-6.jpg","villa-7.jpg","villa-8.jpg","villa-9.jpg","villa-10.jpg","villa-11.jpg","villa-12.jpg","villa-13.jpg","villa-14.jpg","villa-15.jpg"]},
- {slug:"chale",nome:"Chalé Metálico",cat:"residenciais",catLabel:"Residencial",local:"Zona rural · GO",
+ {slug:"chale",nome:"Chalé Metálico",pad:1,cat:"residenciais",catLabel:"Residencial",local:"Villa Assisi, Pirenópolis",
   desc:"Chalé compacto de estrutura metálica leve, assentado sobre o relevo. Os panos de vidro emolduram a paisagem e, no interior, a madeira e a pedra criam um refúgio de aconchego.",
   mat:["Estrutura metálica","Cobertura metálica","Madeira","Pedra","Panos de vidro","Deck externo"],
   imgs:["chale-1.jpg","chale-2.jpg","chale-3.jpg","chale-4.jpg","chale-5.jpg","chale-6.jpg","chale-7.jpg"]},
@@ -314,11 +316,11 @@ const PROJETOS=[
   desc:"Agência bancária de volume horizontal, com faixas da marca em destaque sobre a fachada. Estacionamento amplo e paisagismo acolhem o cliente desde a chegada, de dia e à noite.",
   mat:["Estrutura metálica","Revestimento da marca","Cobogó","Vidro","Paisagismo","Estacionamento coberto"],
   imgs:["crediadag-1.jpg","crediadag-2.jpg","crediadag-3.jpg","crediadag-4.jpg","crediadag-5.jpg"]},
- {slug:"ricardo",nome:"Residência Ricardo e Beatriz",cat:"residenciais",catLabel:"Residencial",local:"Goiânia · GO",
+ {slug:"ricardo",nome:"Ricardo e Beatriz",pad:1,cat:"residenciais",catLabel:"Residencial",local:"Jardins Bolonha",
   desc:"Residência contemporânea de linhas horizontais, marcada por sancas iluminadas que acendem a casa à noite. A piscina se integra à área de estar e o paisagismo tropical envolve o conjunto.",
   mat:["Concreto","Iluminação em sanca","Piscina com deck","Madeira","Painéis ripados","Paisagismo tropical","Espelho d'água"],
   imgs:["ricardo-1.jpg","ricardo-2.jpg","ricardo-3.jpg","ricardo-4.jpg","ricardo-5.jpg","ricardo-6.jpg","ricardo-7.jpg"]},
- {slug:"kaique",nome:"Kaíque e Bruna · Jardins Bolonha",cat:"residenciais",catLabel:"Residencial",local:"Jardins Bolonha · Goiânia",
+ {slug:"kaique",nome:"Kaíque e Bruna",pad:1,cat:"residenciais",catLabel:"Residencial",local:"Jardins Bolonha",
   desc:"Sobrado contemporâneo de dois pavimentos, de volumes brancos recortados por caixilhos escuros. Nos fundos, a piscina com deck e iluminação cênica estende a área de lazer, que ganha a noite com luz quente.",
   mat:["Concreto","Revestimento branco","Amplas esquadrias","Piscina com deck","Iluminação cênica","Paisagismo"],
   imgs:["kaique-1.jpg","kaique-2.jpg","kaique-3.jpg","kaique-4.jpg","kaique-5.jpg","kaique-6.jpg","kaique-7.jpg"]},
@@ -385,7 +387,7 @@ const BASE="assets/projetos/";
 function tileHTML(p){
   return `<button class="tile" data-cat="${p.cat}" data-slug="${p.slug}" aria-label="Abrir projeto ${p.nome}">
     <img src="${BASE+p.imgs[0]}" alt="${p.nome} — ${p.catLabel.toLowerCase()}">
-    <span class="cap"><span class="cap-name">${p.nome}</span></span>
+    <span class="cap">${p.pad?`<span class="cap-local">${p.local}</span>`:""}<span class="cap-name">${p.nome}</span></span>
   </button>`;
 }
 function soonHTML(s){
@@ -419,7 +421,7 @@ function openProject(slug,push){
     </div>
     <div class="d-hero">
       <img src="${BASE+p.imgs[0]}" alt="${p.nome}">
-      <div class="d-htext"><div class="wrap"><h2><span class="tarja">${p.nome}</span></h2></div></div>
+      <div class="d-htext"><div class="wrap"><h2>${p.pad?`<span class="d-local">${p.local}</span>`:""}<span class="tarja">${p.nome}</span></h2></div></div>
     </div>
     <div class="d-body"><div class="wrap">
       <div class="d-intro">
