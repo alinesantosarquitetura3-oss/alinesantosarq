@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Gerador do Cafezinho</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: painel de edição à esquerda, e-mail ao vivo à direita — a bancada escura do escritório. */
+:root{
+  --bg:#0A0A0A;          /* fundo geral */
+  --surface:#0D0F0D;     /* cartões e painéis */
+  --surface-2:#141210;   /* campos e box de destaque */
+  --line:#2A2724;        /* divisórias */
+  --cream:#F3F0EA;       /* títulos */
+  --text:#D8D5CD;        /* texto corrente */
+  --muted:#A79E92;       /* rótulos e legendas */
+  --faint:#6E675F;       /* notas */
+  --accent:#BE6718;      /* laranja da marca */
+  --ok:#7A9B6D;
+  --font-display:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --font-body:'Jost',Helvetica,Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);font-weight:300;font-size:15px;line-height:1.55;}
+button{font-family:var(--font-body);}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+
+.app{display:flex;flex-direction:column;height:100%;}
+header.bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);background:var(--surface);
+  padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+.brand{display:flex;align-items:baseline;gap:10px;margin-right:auto;}
+.brand h1{margin:0;font-family:var(--font-display);font-weight:400;font-size:24px;color:var(--cream);letter-spacing:.2px;}
+.brand .ed{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);}
+.actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{appearance:none;border:1px solid var(--line);background:var(--surface-2);color:var(--text);font-size:12px;font-weight:500;
+  letter-spacing:1.2px;text-transform:uppercase;padding:9px 14px;cursor:pointer;transition:border-color .15s,color .15s;}
+.btn:hover{border-color:var(--muted);color:var(--cream);}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#0A0A0A;}
+.btn.primary:hover{filter:brightness(1.08);}
+.btn.small{padding:5px 9px;font-size:10px;letter-spacing:1px;}
+.btn[disabled]{opacity:.4;cursor:default;}
+
+main{flex:1;display:grid;grid-template-columns:minmax(380px,520px) 1fr;min-height:0;}
+.pane{min-width:0;overflow-y:auto;}
+.form-pane{border-right:1px solid var(--line);padding-block:20px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:16px;}
+.preview-pane{background:#060606;display:flex;flex-direction:column;}
+.preview-head{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);color:var(--faint);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;}
+.preview-head .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);}
+.preview-scroll{flex:1;overflow:auto;display:flex;justify-content:center;padding:18px;padding-right:max(18px,env(safe-area-inset-right,0px));}
+#preview{width:640px;max-width:100%;height:100%;min-height:600px;border:1px solid var(--line);background:#0A0A0A;}
+
+.tabs{display:none;}
+@media (max-width:980px){
+  main{grid-template-columns:1fr;}
+  .form-pane{border-right:none;padding-right:max(16px,env(safe-area-inset-right,0px));}
+  .pane{display:none;}
+  .pane.active{display:flex;flex-direction:column;}
+  .form-pane.active{display:block;}
+  .tabs{display:flex;gap:0;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:env(safe-area-inset-top,0px);z-index:5;}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface);}
+  .tabs button{flex:1;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:12px;cursor:pointer;}
+  .tabs button.on{color:var(--cream);border-bottom-color:var(--accent);}
+}
+
+fieldset{border:1px solid var(--line);background:var(--surface);margin:0 0 16px 0;padding:16px;min-width:0;}
+legend{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);padding:0 8px;}
+label{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:12px 0 5px;}
+label:first-of-type{margin-top:0;}
+input[type=text],textarea,select{width:100%;background:var(--surface-2);border:1px solid var(--line);color:var(--cream);
+  font-family:var(--font-body);font-weight:300;font-size:14px;line-height:1.5;padding:9px 11px;}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--accent);outline:none;}
+textarea{resize:vertical;min-height:64px;}
+.row{display:flex;gap:10px;flex-wrap:wrap;}
+.row>div{flex:1;min-width:140px;}
+.hint{font-size:12px;color:var(--faint);margin:6px 0 0;line-height:1.5;}
+.hint code{color:var(--muted);font-family:inherit;background:var(--surface-2);padding:0 4px;border:1px solid var(--line);}
+.check{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);margin-top:12px;cursor:pointer;}
+.check input{accent-color:var(--accent);width:15px;height:15px;}
+
+.sec-card{border:1px solid var(--line);background:var(--surface-2);padding:14px;margin-bottom:12px;}
+.sec-card .sec-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.sec-num{font-family:var(--font-display);font-style:italic;font-size:20px;color:var(--accent);min-width:34px;font-variant-numeric:tabular-nums;}
+.sec-head select{flex:1;width:auto;}
+.sec-tools{display:flex;gap:4px;}
+.add-sec{width:100%;border-style:dashed;margin-top:4px;}
+
+dialog{background:var(--surface);color:var(--text);border:1px solid var(--line);max-width:560px;width:92%;padding:20px;}
+dialog::backdrop{background:rgba(0,0,0,.65);}
+dialog h2{margin:0 0 10px;font-family:var(--font-display);font-weight:400;color:var(--cream);font-size:22px;}
+dialog textarea{min-height:180px;font-size:12px;}
+.dlg-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;}
+
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--accent);color:#0A0A0A;
+  font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;padding:11px 20px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:50;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+details.guide{border:1px solid var(--line);background:var(--surface);margin-bottom:16px;}
+details.guide summary{cursor:pointer;padding:12px 16px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+details.guide[open] summary{border-bottom:1px solid var(--line);color:var(--cream);}
+details.guide .g-body{padding:14px 16px;font-size:13px;}
+details.guide ol{margin:0;padding-left:18px;}
+details.guide li{margin-bottom:8px;}
+details.guide strong{font-weight:500;color:var(--cream);}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="bar">
+    <div class="brand">
+      <h1>Gerador do Cafezinho</h1>
+      <span class="ed" id="edLabel">Nº 01</span>
+    </div>
+    <div class="actions">
+      <button class="btn" id="btnJson" type="button">Conteúdo (salvar/abrir)</button>
+      <button class="btn" id="btnReset" type="button">Restaurar Nº 01</button>
+      <button class="btn primary" id="btnCopy" type="button">Copiar HTML para o Brevo</button>
+    </div>
+  </header>
+
+  <div class="tabs" id="tabs">
+    <button type="button" data-pane="form" class="on" id="tabForm">Editar</button>
+    <button type="button" data-pane="preview" id="tabPreview">Visualizar</button>
+  </div>
+
+  <main>
+    <div class="pane form-pane active" id="formPane">
+
+      <details class="guide">
+        <summary>Como publicar no Brevo</summary>
+        <div class="g-body">
+          <ol>
+            <li>Preencha os campos abaixo — o e-mail ao lado se atualiza sozinho.</li>
+            <li>Suba as fotos novas para a pasta <strong>assets/</strong> do site (peça aqui no chat que eu subo). Nos campos de imagem, basta escrever <strong>assets/nome-da-foto.jpg</strong>.</li>
+            <li>Clique em <strong>Copiar HTML para o Brevo</strong>.</li>
+            <li>No Brevo: Campanhas → Criar uma campanha de e-mail → Criação → <strong>Cole seu código</strong> → cole tudo → Salvar.</li>
+            <li>Envie um teste para você antes de disparar. Plano gratuito: <strong>300 e-mails/dia</strong> — um bloco por dia.</li>
+            <li>Guarde seu texto com <strong>Conteúdo (salvar/abrir)</strong>: copie o código do conteúdo e cole numa nota; para reabrir depois, cole de volta.</li>
+          </ol>
+        </div>
+      </details>
+
+      <fieldset>
+        <legend>Edição</legend>
+        <div class="row">
+          <div><label for="fEdicao">Número</label><input type="text" id="fEdicao" inputmode="numeric"></div>
+          <div><label for="fMes">Mês e ano</label><input type="text" id="fMes" placeholder="Novembro de 2026"></div>
+        </div>
+        <label for="fAssunto">Assunto do e-mail (use no Brevo)</label>
+        <input type="text" id="fAssunto">
+        <label for="fPreview">Frase de espiada (aparece na caixa de entrada, depois do assunto)</label>
+        <input type="text" id="fPreview">
+      </fieldset>
+
+      <fieldset>
+        <legend>Capa</legend>
+        <label for="fCapaSrc">Foto de capa</label>
+        <input type="text" id="fCapaSrc" placeholder="assets/minha-foto.jpg">
+        <label for="fCapaLegenda">Legenda da foto</label>
+        <input type="text" id="fCapaLegenda">
+      </fieldset>
+
+      <fieldset>
+        <legend>Abertura</legend>
+        <label for="fTitulo">Título grande</label>
+        <input type="text" id="fTitulo">
+        <p class="hint">Para pintar uma palavra de laranja: <code>*palavra*</code>. Para negrito: <code>**palavra**</code>.</p>
+        <label for="fAbertura">Texto de abertura</label>
+        <textarea id="fAbertura" rows="6"></textarea>
+        <p class="hint">Linha em branco separa parágrafos. <code>**negrito**</code> · <code>==destaque laranja==</code></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Seções</legend>
+        <div id="secList"></div>
+        <button class="btn add-sec" id="btnAddSec" type="button">+ Adicionar seção</button>
+        <p class="hint">Dentro do texto das seções: linha <code>- item</code> vira lista com travessão laranja; linha <code>img: assets/foto.jpg | legenda</code> insere uma foto; <code>img2: foto1 | legenda1 | foto2 | legenda2</code> insere duas fotos lado a lado.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Convite final</legend>
+        <label for="fCtaTitulo">Título</label>
+        <input type="text" id="fCtaTitulo">
+        <label for="fCtaTexto">Texto</label>
+        <textarea id="fCtaTexto" rows="3"></textarea>
+        <div class="row">
+          <div><label for="fCtaBotao">Texto do botão</label><input type="text" id="fCtaBotao"></div>
+        </div>
+        <label for="fCtaZap">Mensagem pronta no WhatsApp</label>
+        <input type="text" id="fCtaZap">
+      </fieldset>
+
+      <fieldset>
+        <legend>Rodapé e extras</legend>
+        <label for="fBloco">Frase do rodapé (por bloco de contatos)</label>
+        <select id="fBloco">
+          <option value="A">Bloco A — clientes, parceiros e amigos</option>
+          <option value="B">Bloco B — contatos antigos</option>
+          <option value="C">Bloco C — lojas e fornecedores</option>
+          <option value="X">Personalizada</option>
+        </select>
+        <label for="fRodape">Texto da frase</label>
+        <input type="text" id="fRodape">
+        <label class="check"><input type="checkbox" id="fDesapego"> Incluir bloco do Desapego na Obra</label>
+      </fieldset>
+
+    </div>
+
+    <div class="pane preview-pane" id="previewPane">
+      <div class="preview-head"><span class="dot"></span> Prévia ao vivo · 600px, como no e-mail</div>
+      <div class="preview-scroll"><iframe id="preview" title="Prévia da newsletter"></iframe></div>
+    </div>
+  </main>
+</div>
+
+<dialog id="dlgJson">
+  <h2>Conteúdo desta edição</h2>
+  <p class="hint" style="margin:0 0 10px;">Para <strong>guardar</strong>: copie este código e cole numa nota sua. Para <strong>reabrir</strong>: apague tudo, cole o código guardado e clique em Aplicar.</p>
+  <textarea id="jsonBox" spellcheck="false"></textarea>
+  <div class="dlg-actions">
+    <button class="btn" id="btnJsonCopy" type="button">Copiar</button>
+    <button class="btn" id="btnJsonApply" type="button">Aplicar</button>
+    <button class="btn" id="btnJsonClose" type="button">Fechar</button>
+  </div>
+</dialog>
+
+<div id="toast" role="status"></div>
+
+<template id="tplSec">
+  <div class="sec-card">
+    <div class="sec-head">
+      <span class="sec-num"></span>
+      <select class="sTipo">
+        <option value="padrao">Seção com texto e fotos</option>
+        <option value="box">Box de destaque (borda laranja)</option>
+        <option value="colunas">Duas colunas</option>
+      </select>
+      <div class="sec-tools">
+        <button class="btn small sUp" type="button" title="Mover para cima">↑</button>
+        <button class="btn small sDown" type="button" title="Mover para baixo">↓</button>
+        <button class="btn small sDel" type="button" title="Excluir seção">✕</button>
+      </div>
+    </div>
+    <label>Rótulo pequeno (em cima do título)</label>
+    <input type="text" class="sRotulo">
+    <label>Título</label>
+    <input type="text" class="sTitulo">
+    <div class="only-padrao only-box">
+      <label>Texto</label>
+      <textarea class="sCorpo" rows="7"></textarea>
+    </div>
+    <div class="only-colunas" hidden>
+      <div class="row">
+        <div>
+          <label>Título da coluna 1</label><input type="text" class="sColT1">
+          <label>Linhas da coluna 1</label><textarea class="sColL1" rows="4"></textarea>
+        </div>
+        <div>
+          <label>Título da coluna 2</label><input type="text" class="sColT2">
+          <label>Linhas da coluna 2</label><textarea class="sColL2" rows="4"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+'use strict';
+/* ========= Constantes da marca (não mexer: garantem o padrão da Nº 01) ========= */
+const SITE='https://alinesantosarquitetura.com.br/';
+const ZAP='5562984089202';
+const FRASES_RODAPE={
+  A:'Você recebe este e-mail porque já teve contato com o escritório.',
+  B:'Você recebe este e-mail porque em algum momento trocamos contatos — se preferir não receber, é só sair abaixo.',
+  C:'Você recebe este e-mail porque sua loja já esteve em nossos projetos e especificações.'
+};
+const FB="'Jost',Helvetica,Arial,sans-serif";
+const FD="'Cormorant Garamond',Georgia,'Times New Roman',serif";
+
+/* ========= Conteúdo da Nº 01 (referência e estado inicial) ========= */
+const N01={
+  edicao:'01', mes:'Novembro de 2026',
+  assunto:'O que cabe em 30 dias?',
+  preheader:'Uma loja projetada e pronta em 30 dias — e o que ainda cabe no seu espaço antes de 2027.',
+  capa:{src:'assets/capa-villeta-maggiore-aerea.jpg', legenda:'Vista aérea do Chalé Villeta Maggiore, na Villa Assisi, em Pirenópolis'},
+  titulo:'O que cabe em *30 dias*?',
+  abertura:'Olá!\n\nFaz tempo que eu queria voltar a escrever para quem já passou pelo escritório — clientes, parceiros e amigos que acompanham nosso trabalho. A partir de hoje, a cada quinze dias, divido aqui um projeto real, uma decisão que fez diferença e algo útil para o seu espaço.\n\nNesse primeiro Cafezinho Coado com Arquitetura, um tema que tem aparecido muito por aqui: **pressa**. E como um projeto bem decidido transforma pouco tempo em resultado.',
+  secoes:[
+    {tipo:'padrao', rotulo:'Projeto do mês', titulo:'Uma loja projetada e pronta em um mês',
+     corpo:'img: assets/projetos/xz-1.jpg | XZ Modas — fachada da loja\nimg2: assets/projetos/xz-2.jpg | XZ Modas — salão com vitrine | assets/projetos/xz-5.jpg | XZ Modas — caixa com iluminação embutida\n\nA **XZ Modas** chegou com uma loja de cerca de 45 m² e um prazo apertado. Em um mês, o espaço foi projetado e executado — do primeiro desenho à porta aberta.\n\nO segredo não foi construir mais, foi **aproveitar melhor**. Mantivemos praticamente todo o mobiliário que as empresárias já tinham: ==só 20% da loja foi feito novo==. O restante ganhou nova vida com recursos rápidos:\n\n- pintura com efeito especial\n- envelopamento dos armários existentes\n- luminárias reformadas\n- detalhes em gesso acartonado\n\nMenos obra, menos espera e menos custo, com uma loja que parece nova.'},
+    {tipo:'box', rotulo:'Decisão antes da estética', titulo:'Obra rápida começa com tudo decidido',
+     corpo:'O que atrasa uma obra quase nunca é a mão de obra — é a decisão adiada. Revestimento escolhido na véspera, iluminação definida com o forro fechado, marcenaria medida duas vezes. Quando cada escolha está fechada antes do primeiro dia, o cronograma deixa de ser uma aposta.'},
+    {tipo:'colunas', rotulo:'Antes das festas ou em janeiro?', titulo:'O que ainda dá tempo de fazer',
+     colT1:'Cabe até dezembro', colL1:'Novo layout com o que você já tem\nIluminação e luminárias\nPintura e papel de parede\nCortinas, tapetes e objetos',
+     colT2:'Melhor planejar agora para janeiro', colL2:'Troca de pisos e revestimentos\nMarcenaria sob medida\nMudanças em hidráulica e elétrica\nAmpliações'},
+    {tipo:'padrao', rotulo:'Saindo do forno', titulo:'Uma nova experiência *vem aí*',
+     corpo:'Projetar os chalés da Villa Assisi, como o da foto da capa, foi um exercício de escuta da paisagem. Cada volume foi pensado para pousar entre as árvores, abrir a vista para a serra e deixar a mata entrar pelos grandes panos de vidro. Pedra, concreto e madeira foram escolhidos para envelhecer bem junto com a natureza, e não competir com ela. É o tipo de projeto em que a arquitetura se mede pelo silêncio que ela cria.\n\nDepois do sucesso dos chalés **Villeta Maggiore** e **Villeta La Rocca**, que projetamos para a Villa Assisi, em Pirenópolis, mais uma experiência única está saindo do nosso forno.\n\nimg: assets/em-breve-pirenopolis.jpg | Planta humanizada em aquarela do novo projeto\n\nPor enquanto, só posso adiantar duas pistas: dá para chegar de carro, e o contato com a natureza vai ser inesquecível. Os próximos capítulos chegam por aqui.'}
+  ],
+  cta:{titulo:'Vamos decidir bem, *juntos.*',
+       texto:'Tem um espaço — casa, loja, consultório — que precisa mudar e pouco tempo para isso? Me conte em uma conversa de 20 minutos, sem compromisso.',
+       botao:'Quero conversar',
+       zap:'Olá Aline, li o Cafezinho Coado e quero conversar sobre um projeto.'},
+  bloco:'A', rodape:FRASES_RODAPE.A, desapego:true
+};
+
+/* ========= Mini-formatção de texto ========= */
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function inline(s){ // **negrito creme** · ==destaque laranja==
+  return esc(s)
+    .replace(/==([^=]+)==/g,'<strong style="font-weight:500;color:#BE6718;">$1</strong>')
+    .replace(/\*\*([^*]+)\*\*/g,'<strong style="font-weight:500;color:#F3F0EA;">$1</strong>');
+}
+function heading(s,italicEm){ // *em laranja* nos títulos
+  const em=italicEm?'<em style="color:#BE6718;font-style:italic;">$1</em>':'<em style="color:#BE6718;">$1</em>';
+  return esc(s).replace(/\*([^*]+)\*/g,em);
+}
+const asset=u=>{u=String(u||'').trim();return /^https?:\/\//.test(u)?u:SITE+u.replace(/^\/+/,'');};
+
+/* ========= Blocos do e-mail (os mesmos estilos da Nº 01, byte a byte) ========= */
+const P=(t,m)=>`<p style="margin:${m};font-family:${FB};font-weight:300;font-size:16px;line-height:26px;color:#D8D5CD;">${t}</p>`;
+const ROTULO=(t,c)=>`<p style="margin:0 0 10px 0;font-family:${FB};font-size:10px;letter-spacing:3px;text-transform:uppercase;color:${c};">${t}</p>`;
+const IMG=(src,alt,extra)=>`<img src="${esc(asset(src))}" alt="${esc(alt)}" width="504" style="display:block;${extra||''}width:504px;max-width:100%;height:auto;border:0;">`;
+const DUPLA=(a,b)=>`<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td width="50%" style="padding:12px 6px 0 0;"><img src="${esc(asset(a.src))}" alt="${esc(a.alt)}" width="246" style="display:block;width:246px;max-width:100%;height:auto;border:0;"></td><td width="50%" style="padding:12px 0 0 6px;"><img src="${esc(asset(b.src))}" alt="${esc(b.alt)}" width="246" style="display:block;width:246px;max-width:100%;height:auto;border:0;"></td></tr></table>`;
+
+function parseCorpo(txt){ // devolve lista de blocos {t:'p'|'lista'|'img'|'img2', ...}
+  const blocos=[];let lista=null;
+  for(const raw of String(txt||'').split('\n')){
+    const l=raw.trim();
+    if(!l){lista=null;continue;}
+    let m;
+    if(m=l.match(/^img:\s*([^|]+)\|(.*)$/)){lista=null;blocos.push({t:'img',src:m[1].trim(),alt:m[2].trim()});}
+    else if(m=l.match(/^img2:\s*([^|]+)\|([^|]+)\|([^|]+)\|(.*)$/)){lista=null;blocos.push({t:'img2',a:{src:m[1].trim(),alt:m[2].trim()},b:{src:m[3].trim(),alt:m[4].trim()}});}
+    else if(l.startsWith('- ')){if(!lista){lista={t:'lista',itens:[]};blocos.push(lista);}lista.itens.push(l.slice(2));}
+    else{lista=null;const last=blocos[blocos.length-1];
+      if(last&&last.t==='p'&&last.open){last.txt+=' '+l;}
+      else blocos.push({t:'p',txt:l});}
+  }
+  return blocos;
+}
+function renderCorpo(blocos,firstPTop){
+  const out=[];
+  blocos.forEach((b,i)=>{
+    const ultimo=i===blocos.length-1;
+    if(b.t==='p'){
+      const top=(i===0&&firstPTop)?'20px':'0';
+      const m=ultimo?(top==='0'?'0':top+' 0 0 0'):top+' 0 16px 0';
+      out.push(P(inline(b.txt),m));
+    }else if(b.t==='lista'){
+      const tds=b.itens.map((it,j)=>`<tr><td style="padding:0 0 ${j===b.itens.length-1?'16':'8'}px 0;font-family:${FB};font-weight:300;font-size:15px;line-height:24px;color:#D8D5CD;"><span style="color:#BE6718;">—</span>&nbsp; ${inline(it)}</td></tr>`).join('');
+      out.push(`<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${tds}</table>`);
+    }else if(b.t==='img'){
+      out.push(IMG(b.src,b.alt,ultimo?'':'margin:0 0 20px 0;'));
+    }else if(b.t==='img2'){
+      out.push(DUPLA(b.a,b.b));
+    }
+  });
+  return out.join('\n');
+}
+
+function buildEmail(d){
+  const num2=String(d.edicao).padStart(2,'0');
+  const numCurto=String(parseInt(d.edicao,10)||d.edicao);
+  const secoesHtml=d.secoes.map((s,i)=>{
+    const n=String(i+1).padStart(2,'0');
+    const rot=`${n} · ${esc(s.rotulo)}`;
+    if(s.tipo==='box'){
+      const ps=parseCorpo(s.corpo).filter(b=>b.t==='p');
+      const corpo=ps.map((b,j)=>`<p style="margin:${j===ps.length-1?'0':'0 0 12px 0'};font-family:${FB};font-weight:300;font-size:15px;line-height:24px;color:#D8D5CD;">${inline(b.txt)}</p>`).join('');
+      return `<tr><td class="pad" style="padding:44px 48px 0 48px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#141210" style="background:#141210;border-left:2px solid #BE6718;"><tr><td style="padding:28px 30px;"><p style="margin:0 0 10px 0;font-family:${FB};font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#A79E92;">${rot}</p><h2 style="margin:0 0 14px 0;font-family:${FD};font-weight:400;font-size:26px;line-height:30px;color:#F3F0EA;">${heading(s.titulo)}</h2>${corpo}</td></tr></table></td></tr>`;
+    }
+    if(s.tipo==='colunas'){
+      const col=(t,linhas,side)=>`<td valign="top" width="50%" style="padding-${side}:12px;"><p style="margin:0 0 8px 0;font-family:${FB};font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#BE6718;">${esc(t)}</p><p style="margin:0;font-family:${FB};font-weight:300;font-size:15px;line-height:24px;color:#D8D5CD;">${String(linhas||'').split('\n').filter(x=>x.trim()).map(esc).join('<br>')}</p></td>`;
+      return `<tr><td class="pad" style="padding:44px 48px 0 48px;">${ROTULO(rot,'#A79E92')}<h2 class="h2" style="margin:0 0 20px 0;font-family:${FD};font-weight:400;font-size:34px;line-height:38px;color:#F3F0EA;">${heading(s.titulo)}</h2>\n<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${col(s.colT1,s.colL1,'right')}\n${col(s.colT2,s.colL2,'left')}</tr></table></td></tr>`;
+    }
+    // padrão: imagens iniciais separadas, texto depois
+    const blocos=parseCorpo(s.corpo);
+    let head=[],corpo=[...blocos];
+    while(corpo.length&&(corpo[0].t==='img'||corpo[0].t==='img2')){head.push(corpo.shift());}
+    const cab=`<tr><td class="pad" style="padding:44px 48px 0 48px;">${ROTULO(rot,'#A79E92')}<h2 class="h2" style="margin:0 0 20px 0;font-family:${FD};font-weight:400;font-size:34px;line-height:38px;color:#F3F0EA;">${heading(s.titulo)}</h2>${head.length?'</td></tr>':''}`;
+    if(head.length){
+      const imgs=head.map((b,j)=>b.t==='img'?IMG(b.src,b.alt):DUPLA(b.a,b.b)).join('\n');
+      return `${cab}\n<tr><td class="pad" style="padding:0 48px;">${imgs}</td></tr>\n<tr><td class="pad" style="padding:20px 48px 0 48px;">\n${renderCorpo(corpo,false)}</td></tr>`;
+    }
+    return `${cab}\n${renderCorpo(corpo,true)}</td></tr>`;
+  }).join('\n');
+
+  const desapegoHtml=d.desapego?`\n<tr><td class="pad" style="padding:0 48px 44px 48px;"><a href="https://www.desapegonaobra.com.br" target="_blank"><img src="${SITE}assets/desapego-bloco.jpg" alt="Desapego na Obra: que tal ganhar um novo cômodo… sem gastar nada? É só vender as sobras da sua obra na comunidade Desapego na Obra. desapegonaobra.com.br" width="504" style="display:block;width:504px;max-width:100%;height:auto;border:0;"></a></td></tr>`:'';
+
+  const zapUrl=`https://wa.me/${ZAP}?text=${encodeURIComponent(d.cta.zap)}`;
+
+  return `<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
+<title>Cafezinho Coado com Arquitetura · Nº ${num2}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&family=Montserrat:wght@500;600&display=swap" rel="stylesheet">
+<style>body{margin:0;padding:0;background:#0A0A0A;}a{color:#BE6718;}@media (max-width:620px){.wrap{width:100% !important;}.pad{padding-left:24px !important;padding-right:24px !important;}.h1{font-size:40px !important;line-height:44px !important;}.h2{font-size:30px !important;line-height:34px !important;}.pers-td{width:92px !important;}.pers{width:86px !important;}.pers{margin-left:auto;}}</style>
+</head><body style="margin:0;padding:0;background:#0A0A0A;">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#0A0A0A;">${esc(d.preheader)}</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0A0A0A" style="background:#0A0A0A;"><tr><td align="center" style="padding:24px 0;">
+<table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#0D0F0D" style="width:600px;max-width:600px;table-layout:fixed;background:#0D0F0D;">
+<tr><td class="pad" style="padding:28px 48px 20px 48px;border-bottom:1px solid #2A2724;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="left" valign="middle"><img src="${SITE}assets/cafezinho-logo.png" alt="Cafezinho Coado com Arquitetura · Nº ${numCurto} · ${esc(d.mes)}" width="184" style="display:block;width:184px;max-width:184px;max-width:100%;height:auto;border:0;"></td><td align="right" valign="middle" style="padding-top:17px;"><img src="${SITE}assets/logo-alma.png" alt="alinesantos | arq — arquitetura com alma" width="170" style="display:block;width:170px;max-width:170px;max-width:100%;height:auto;border:0;margin-left:auto;"></td></tr></table></td></tr>
+<tr><td class="pad" style="padding:28px 48px 0 48px;">${IMG(d.capa.src,d.capa.legenda)}</td></tr>
+<tr><td class="pad" style="padding:12px 48px 0 48px;"><p style="margin:0;font-family:${FB};font-size:11px;letter-spacing:1px;color:#A79E92;font-style:italic;">${esc(d.capa.legenda)}</p></td></tr>
+<tr><td class="pad" style="padding:44px 48px 8px 48px;"><p style="margin:0 0 14px 0;font-family:${FB};font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#BE6718;">— Uma conversa a cada quinze dias</p>
+<h1 class="h1" style="margin:0 0 22px 0;font-family:${FD};font-weight:400;font-size:48px;line-height:52px;color:#F3F0EA;">${heading(d.titulo,true)}</h1>
+${parseCorpo(d.abertura).filter(b=>b.t==='p').map((b,j,arr)=>P(inline(b.txt),j===arr.length-1?'0':'0 0 16px 0')).join('\n')}</td></tr>
+${secoesHtml}
+<tr><td class="pad" align="center" style="padding:56px 48px 52px 48px;"><h2 class="h2" style="margin:0 0 14px 0;font-family:${FD};font-weight:400;font-size:36px;line-height:40px;color:#F3F0EA;">${heading(d.cta.titulo)}</h2>
+<p style="margin:0 0 28px 0;font-family:${FB};font-weight:300;font-size:15px;line-height:24px;color:#A79E92;">${inline(d.cta.texto)}</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#BE6718" style="background:#BE6718;"><a href="${zapUrl}" target="_blank" style="display:inline-block;padding:16px 34px;font-family:${FB};font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:#0A0A0A;text-decoration:none;">${esc(d.cta.botao)}</a></td></tr></table>
+<p style="margin:18px 0 0 0;font-family:${FB};font-weight:300;font-size:13px;line-height:20px;color:#A79E92;">Se preferir, é só responder este e-mail.</p></td></tr>
+<tr><td class="pad" style="padding:0 48px 40px 48px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #2A2724;"><tr><td width="240" valign="middle" style="padding-top:32px;"><img src="${SITE}assets/aline-assinatura.jpg" alt="Arqta. Aline Santos" width="240" style="display:block;width:240px;max-width:240px;max-width:100%;height:auto;border:0;"></td><td valign="middle" style="padding:32px 0 0 24px;"><p style="margin:0;font-family:${FD};font-size:28px;line-height:32px;color:#F3F0EA;font-style:italic;">Arqta. Aline Santos</p><p style="margin:6px 0 22px 0;font-family:${FB};font-size:11px;letter-spacing:1.5px;line-height:16px;text-transform:uppercase;color:#A79E92;">Arquitetura com alma · desde 2003</p><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#BE6718" style="background:#BE6718;"><a href="https://wa.me/${ZAP}?text=${encodeURIComponent('Olá Aline, li o Cafezinho Coado com Arquitetura e quero tomar um café!')}" target="_blank" style="display:inline-block;padding:14px 24px;font-family:${FB};font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:#0A0A0A;text-decoration:none;">Me chama para um Café!</a></td></tr></table></td></tr></table></td></tr>${desapegoHtml}
+<tr><td class="pad" align="center" bgcolor="#0A0A0A" style="padding:28px 48px 32px 48px;background:#0A0A0A;"><p style="margin:0 0 10px 0;font-family:${FB};font-size:12px;line-height:20px;color:#A79E92;"><a href="https://alinesantosarquitetura.com.br" style="color:#D8D5CD;text-decoration:none;">Site</a> &nbsp;·&nbsp; <a href="https://instagram.com/alinesantosarq" style="color:#D8D5CD;text-decoration:none;">Instagram</a> &nbsp;·&nbsp; <a href="https://wa.me/${ZAP}" style="color:#D8D5CD;text-decoration:none;">WhatsApp</a></p>
+<p style="margin:0;font-family:${FB};font-size:11px;line-height:18px;color:#6E675F;">Aline Santos Arquitetos · Goiânia, GO<br>${esc(d.rodape)}<br><a href="{{ unsubscribe }}" style="color:#A79E92;">Não quero mais receber</a></p></td></tr>
+</table></td></tr></table></body></html>`;
+}
+
+/* ========= Estado e formulário ========= */
+let data=JSON.parse(JSON.stringify(N01));
+try{const s=localStorage.getItem('cafezinho-rascunho');if(s){const p=JSON.parse(s);if(p&&p.secoes)data=p;}}catch(e){}
+
+const $=id=>document.getElementById(id);
+const F={edicao:'fEdicao',mes:'fMes',assunto:'fAssunto',preheader:'fPreview',titulo:'fTitulo',abertura:'fAbertura'};
+
+function fillForm(){
+  for(const k in F)$(F[k]).value=data[k]??'';
+  $('fCapaSrc').value=data.capa.src;$('fCapaLegenda').value=data.capa.legenda;
+  $('fCtaTitulo').value=data.cta.titulo;$('fCtaTexto').value=data.cta.texto;
+  $('fCtaBotao').value=data.cta.botao;$('fCtaZap').value=data.cta.zap;
+  $('fBloco').value=data.bloco;$('fRodape').value=data.rodape;$('fDesapego').checked=!!data.desapego;
+  renderSecForm();
+}
+function renderSecForm(){
+  const list=$('secList');list.innerHTML='';
+  data.secoes.forEach((s,i)=>{
+    const node=$('tplSec').content.firstElementChild.cloneNode(true);
+    node.querySelector('.sec-num').textContent=String(i+1).padStart(2,'0');
+    const tipo=node.querySelector('.sTipo');tipo.value=s.tipo;
+    node.querySelector('.sRotulo').value=s.rotulo||'';
+    node.querySelector('.sTitulo').value=s.titulo||'';
+    node.querySelector('.sCorpo').value=s.corpo||'';
+    node.querySelector('.sColT1').value=s.colT1||'';node.querySelector('.sColL1').value=s.colL1||'';
+    node.querySelector('.sColT2').value=s.colT2||'';node.querySelector('.sColL2').value=s.colL2||'';
+    const sync=()=>{
+      node.querySelector('.only-padrao').hidden=tipo.value==='colunas';
+      node.querySelector('.only-colunas').hidden=tipo.value!=='colunas';
+    };
+    sync();
+    node.addEventListener('input',()=>{
+      s.tipo=tipo.value;s.rotulo=node.querySelector('.sRotulo').value;s.titulo=node.querySelector('.sTitulo').value;
+      s.corpo=node.querySelector('.sCorpo').value;
+      s.colT1=node.querySelector('.sColT1').value;s.colL1=node.querySelector('.sColL1').value;
+      s.colT2=node.querySelector('.sColT2').value;s.colL2=node.querySelector('.sColL2').value;
+      sync();refresh(false);
+    });
+    node.querySelector('.sUp').addEventListener('click',()=>{if(i>0){data.secoes.splice(i-1,0,data.secoes.splice(i,1)[0]);renderSecForm();refresh(false);}});
+    node.querySelector('.sDown').addEventListener('click',()=>{if(i<data.secoes.length-1){data.secoes.splice(i+1,0,data.secoes.splice(i,1)[0]);renderSecForm();refresh(false);}});
+    node.querySelector('.sDel').addEventListener('click',()=>{data.secoes.splice(i,1);renderSecForm();refresh(false);});
+    list.appendChild(node);
+  });
+}
+function readForm(){
+  for(const k in F)data[k]=$(F[k]).value;
+  data.capa.src=$('fCapaSrc').value;data.capa.legenda=$('fCapaLegenda').value;
+  data.cta.titulo=$('fCtaTitulo').value;data.cta.texto=$('fCtaTexto').value;
+  data.cta.botao=$('fCtaBotao').value;data.cta.zap=$('fCtaZap').value;
+  data.bloco=$('fBloco').value;data.rodape=$('fRodape').value;data.desapego=$('fDesapego').checked;
+}
+let t=null;
+function refresh(fill){
+  if(fill!==false)readForm();
+  $('edLabel').textContent='Nº '+String(data.edicao).padStart(2,'0');
+  clearTimeout(t);
+  t=setTimeout(()=>{
+    $('preview').srcdoc=buildEmail(data);
+    try{localStorage.setItem('cafezinho-rascunho',JSON.stringify(data));}catch(e){}
+  },200);
+}
+
+document.querySelector('.form-pane').addEventListener('input',e=>{if(e.target.closest('#secList'))return;refresh();});
+$('fBloco').addEventListener('change',()=>{const v=$('fBloco').value;if(FRASES_RODAPE[v]){$('fRodape').value=FRASES_RODAPE[v];}refresh();});
+$('btnAddSec').addEventListener('click',()=>{data.secoes.push({tipo:'padrao',rotulo:'Nova seção',titulo:'Título da seção',corpo:'Escreva aqui…'});renderSecForm();refresh(false);});
+$('btnReset').addEventListener('click',()=>{data=JSON.parse(JSON.stringify(N01));fillForm();refresh(false);toast('Nº 01 restaurada');});
+
+function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200);}
+async function copyText(txt,okMsg){
+  try{await navigator.clipboard.writeText(txt);toast(okMsg);}
+  catch(e){
+    const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');toast(okMsg);}catch(e2){toast('Selecione e copie manualmente');}
+    ta.remove();
+  }
+}
+$('btnCopy').addEventListener('click',()=>{readForm();copyText(buildEmail(data),'HTML copiado — cole no Brevo');});
+
+const dlg=$('dlgJson');
+$('btnJson').addEventListener('click',()=>{readForm();$('jsonBox').value=JSON.stringify(data,null,2);dlg.showModal();});
+$('btnJsonCopy').addEventListener('click',()=>copyText($('jsonBox').value,'Conteúdo copiado'));
+$('btnJsonApply').addEventListener('click',()=>{
+  try{const p=JSON.parse($('jsonBox').value);if(!p||!p.secoes)throw 0;data=p;fillForm();refresh(false);dlg.close();toast('Conteúdo aplicado');}
+  catch(e){toast('Código inválido — confira o que foi colado');}
+});
+$('btnJsonClose').addEventListener('click',()=>dlg.close());
+
+document.querySelectorAll('#tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  $('formPane').classList.toggle('active',b.dataset.pane==='form');
+  $('previewPane').classList.toggle('active',b.dataset.pane==='preview');
+}));
+
+window.buildEmail=buildEmail;window.N01=N01; // para testes
+fillForm();refresh(false);
+</script>
+</body>
+</html>
